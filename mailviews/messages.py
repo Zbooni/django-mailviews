@@ -3,8 +3,6 @@ from django.core.mail.message import EmailMessage, EmailMultiAlternatives
 from django.template import Context
 from django.template.loader import get_template, select_template
 
-from mailviews.utils import unescape
-
 
 class EmailMessageView(object):
     """
@@ -34,7 +32,7 @@ class EmailMessageView(object):
 
         :rtype: :class:`django.template.Context`
         """
-        return Context(kwargs)
+        return kwargs
 
     def render_to_message(self, extra_context=None, **kwargs):
         """
@@ -158,7 +156,7 @@ class TemplatedEmailMessageView(EmailMessageView):
         :returns: A rendered subject.
         :rtype: :class:`str`
         """
-        rendered = self.subject_template.render(unescape(context))
+        rendered = self.subject_template.render(context)
         return rendered.strip()
 
     def render_body(self, context):
@@ -173,7 +171,7 @@ class TemplatedEmailMessageView(EmailMessageView):
         :returns: A rendered body.
         :rtype: :class:`str`
         """
-        return self.body_template.render(unescape(context))
+        return self.body_template.render(context)
 
 
 class TemplatedHTMLEmailMessageView(TemplatedEmailMessageView):
